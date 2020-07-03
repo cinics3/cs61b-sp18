@@ -106,6 +106,7 @@ public class IntList {
         else if(B == null && A != null) return A;
         else if(A == null && B == null) return null;
 
+        /**
         IntList p = A, q = B;
         IntList res = new IntList(0, null);
         IntList ptr = res;
@@ -123,6 +124,9 @@ public class IntList {
         }
 
         return res.rest;
+         */
+
+        return new IntList(A.first, catenate(A.rest, B));
     }
 
 
