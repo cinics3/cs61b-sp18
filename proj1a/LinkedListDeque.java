@@ -99,6 +99,10 @@ public class LinkedListDeque<T> {
     }
 
     public T get(int index) {
+        if (index < 0 || index >= size) {
+            return null;
+        }
+
         int cnt = 0;
         Node p = sentinel.next;
 
@@ -121,13 +125,20 @@ public class LinkedListDeque<T> {
     }
 
     public T getRecursive(int index) {
+        if (index < 0 && index >= size) {
+            return null;
+        }
+
         if (index == 0) {
             return sentinel.next.item;
         } else {
             sentinel = sentinel.next;
 
-            return getRecursive(index - 1);
+            if (sentinel.next == sentinel) {
+                return null;
+            } else {
+                return getRecursive(index - 1);
+            }
         }
-
     }
 }

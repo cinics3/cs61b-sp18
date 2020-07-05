@@ -107,7 +107,11 @@ public class ArrayDeque<T> {
     }
 
     public T get(int i) {
-        return item[i - 1];
+        if (i < 0 && i >= maxSize) {
+            return null;
+        }
+
+        return item[i];
     }
 
 }
