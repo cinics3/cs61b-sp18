@@ -3,53 +3,53 @@ public class ArrayDeque<T> {
     private T[] item;
     private int nextFirst;
     private int nextLast;
-    private int MaxSize;
+    private int maxSize;
     private int size;
     private static int factor = 2;
 
     public ArrayDeque() {
         item = (T[]) new Object[8];
-        MaxSize = 8;
+        maxSize = 8;
         nextFirst = 0;
         nextLast = 0;
         size = 0;
     }
 
-    public ArrayDeque(ArrayDeque<T> other) {
-        item = (T[]) new Object[other.MaxSize];
+    public ArrayDeque(ArrayDeque other) {
+        item = (T[]) new Object[other.maxSize];
         nextFirst = other.nextFirst;
         nextLast = other.nextLast;
-        MaxSize = other.MaxSize;
+        maxSize = other.maxSize;
         size = other.size;
-        System.arraycopy(item, 0, other, 0, MaxSize - 1);
+        System.arraycopy(item, 0, other, 0, maxSize - 1);
     }
 
-    public void resize(int capacity) {
+    private void resize(int capacity) {
         T[] a = (T[]) new Object[capacity];
-        System.arraycopy(item, 0, a, 0, MaxSize - 1);
-        MaxSize = capacity;
+        System.arraycopy(item, 0, a, 0, maxSize - 1);
+        maxSize = capacity;
         item = a;
     }
 
     public void addFirst(T x) {
-        if(size == MaxSize) {
-            resize(MaxSize * factor);
+        if (size == maxSize) {
+            resize(maxSize * factor);
         }
 
-        while(getFirst() != null) {
-            nextFirst = (nextFirst - 1 + MaxSize) % MaxSize;
+        while (getFirst() != null) {
+            nextFirst = (nextFirst - 1 + maxSize) % maxSize;
         }
         item[nextFirst] = x;
         size += 1;
     }
 
     public void addLast(T x) {
-        if(size == MaxSize) {
-            resize(MaxSize * factor);
+        if (size == maxSize) {
+            resize(maxSize * factor);
         }
 
-        while(getLast() != null) {
-            nextLast = (nextLast + 1 + MaxSize) % MaxSize;
+        while (getLast() != null) {
+            nextLast = (nextLast + 1 + maxSize) % maxSize;
         }
         item[nextLast] = x;
         size += 1;
@@ -67,10 +67,10 @@ public class ArrayDeque<T> {
         int first = nextFirst;
         int cnt = 0;
 
-        while(cnt <= size) {
-            cnt ++;
+        while (cnt <= size) {
+            cnt++;
             System.out.println(item[first] + " ");
-            first = (first + 1 + MaxSize) % MaxSize;
+            first = (first + 1 + maxSize) % maxSize;
         }
         System.out.println();
     }
@@ -78,7 +78,7 @@ public class ArrayDeque<T> {
     public T removeFirst() {
         T res = getFirst();
         item[nextFirst] = null;
-        nextFirst = (nextFirst + 1 + MaxSize) % MaxSize;
+        nextFirst = (nextFirst + 1 + maxSize) % maxSize;
         size -= 1;
         return res;
     }
@@ -86,17 +86,17 @@ public class ArrayDeque<T> {
     public T removeLast() {
         T res = getLast();
         item[nextLast] = null;
-        nextLast = (nextLast - 1 + MaxSize) % MaxSize;
+        nextLast = (nextLast - 1 + maxSize) % maxSize;
         size -= 1;
         return res;
     }
 
-    public T getFirst() {
+    private T getFirst() {
         return item[nextFirst];
     }
 
 
-    public T getLast() {
+    private T getLast() {
         return item[nextLast];
     }
 
