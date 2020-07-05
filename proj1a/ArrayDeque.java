@@ -15,6 +15,7 @@ public class ArrayDeque<T> {
         size = 0;
     }
 
+    /*
     public ArrayDeque(ArrayDeque other) {
         item = (T[]) new Object[other.maxSize];
         nextFirst = other.nextFirst;
@@ -23,6 +24,7 @@ public class ArrayDeque<T> {
         size = other.size;
         System.arraycopy(item, 0, other, 0, maxSize - 1);
     }
+    */
 
     private void resize(int capacity) {
         T[] a = (T[]) new Object[capacity];
