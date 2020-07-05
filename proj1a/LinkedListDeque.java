@@ -31,7 +31,7 @@ public class LinkedListDeque<T> {
         size = 0;
     }
 
-
+    /*
     public LinkedListDeque(LinkedListDeque other) {
         sentinel = new Node(null);
         sentinel.prev = sentinel;
@@ -42,7 +42,7 @@ public class LinkedListDeque<T> {
             addLast((T) other.get(i));
         }
     }
-
+    */
 
     /** Add data of the front in the Deque. */
     public void addFirst(T item) {
@@ -94,8 +94,8 @@ public class LinkedListDeque<T> {
     /** Remove and return the item at the last of the Deque. */
     public T removeLast() {
         T res = getLast();
+        sentinel.prev.prev.next = sentinel;
         sentinel.prev = sentinel.prev.prev;
-        sentinel.prev.next = sentinel;
 
         if (!isEmpty()) {
             size -= 1;
