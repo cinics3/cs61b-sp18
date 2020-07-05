@@ -99,7 +99,7 @@ public class LinkedListDeque<T> {
     }
 
     public T get(int index) {
-        if (index < 0 || index >= size) {
+        if (index < 0 || index > size) {
             return null;
         }
 
@@ -125,7 +125,7 @@ public class LinkedListDeque<T> {
     }
 
     public T getRecursive(int index) {
-        if (index < 0 && index >= size) {
+        if (index < 0 && index > size) {
             return null;
         }
 
