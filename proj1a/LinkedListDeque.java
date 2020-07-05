@@ -1,5 +1,6 @@
 public class LinkedListDeque<T> {
 
+    /** Initialization Node. */
     private class Node {
         private Node prev;
         private T item;
@@ -18,9 +19,11 @@ public class LinkedListDeque<T> {
         }
     }
 
+    /** Initialization data. */
     private Node sentinel;
     private int size;
 
+    /** Create an empty Deque. */
     public LinkedListDeque() {
         sentinel = new Node(null);
         sentinel.prev = sentinel;
@@ -28,7 +31,7 @@ public class LinkedListDeque<T> {
         size = 0;
     }
 
-    /*
+
     public LinkedListDeque(LinkedListDeque other) {
         sentinel = new Node(null);
         sentinel.prev = sentinel;
@@ -39,26 +42,28 @@ public class LinkedListDeque<T> {
             addLast((T) other.get(i));
         }
     }
-    */
 
+
+    /** Add data of the front in the Deque. */
     public void addFirst(T item) {
-        Node p = new Node(sentinel, item, sentinel.next);
-        sentinel.next.prev = p;
-        sentinel.next = p;
+        sentinel.next = new Node(sentinel, item, sentinel.next);
+        sentinel.next.next.prev = sentinel.next.prev;
         size += 1;
     }
 
+    /** Add data of the last in the Deque. */
     public void addLast(T item) {
-        Node p = new Node(sentinel.prev, item, sentinel);
-        sentinel.prev.next = p;
-        sentinel.prev = p;
+        sentinel.prev = new Node(sentinel.prev, item, sentinel);
+        sentinel.prev.prev.next = sentinel.prev;
         size += 1;
     }
 
+    /** Return Deque whether it is empty. */
     public boolean isEmpty() {
         return size == 0 ? true : false;
     }
 
+    /** Return the number of size in the Deque. */
     public int size() {
         return size;
     }
@@ -74,66 +79,61 @@ public class LinkedListDeque<T> {
         System.out.println();
     }
 
+    /** Remove and return the item at the front of the Deque. */
     public T removeFirst() {
-        if (size == 0) {
-            return null;
-        } else {
-            T res = getFirst();
-            sentinel.next.next.prev = sentinel;
-            sentinel.next = sentinel.next.next;
+        T res = getFirst();
+        sentinel.next.next.prev = sentinel;
+        sentinel.next = sentinel.next.next;
+
+        if (!isEmpty()) {
             size -= 1;
-            return res;
         }
+        return res;
     }
 
+    /** Remove and return the item at the last of the Deque. */
     public T removeLast() {
-        if (size == 0) {
-            return null;
-        } else {
-            T res = getLast();
-            sentinel.prev = sentinel.prev.prev;
-            sentinel.prev.next = sentinel;
+        T res = getLast();
+        sentinel.prev = sentinel.prev.prev;
+        sentinel.prev.next = sentinel;
+
+        if (!isEmpty()) {
             size -= 1;
-            return res;
         }
+        return res;
     }
 
+    /** Return the index item of the Deque. using iteration. */
     public T get(int index) {
-        int cnt = 0;
         Node p = sentinel.next;
 
-        while (p != sentinel) {
-            if (index == cnt) {
-                return p.item;
-            }
+        for (int i = 0; i < index; i ++) {
             p = p.next;
         }
 
-        return null;
+        return p.item;
     }
 
+    /** Return the first item of the Deque. */
     private T getFirst() {
         return sentinel.next.item;
     }
 
+    /** Return the last item of the Deque. */
     private T getLast() {
         return sentinel.prev.item;
     }
 
-    public T getRecursive(int index) {
+    private T getRecursive(int index, Node p) {
         if (index == 0) {
-            if (sentinel.next == sentinel) {
-                return null;
-            }
             return sentinel.next.item;
-        } else {
-            sentinel = sentinel.next;
-
-            if (sentinel.next == sentinel) {
-                return null;
-            } else {
-                return getRecursive(index - 1);
-            }
         }
+
+        return getRecursive(index - 1, sentinel.next);
+    }
+
+    /** Return the index of the Deque. using recursion. */
+    public T getRecursive(int index) {
+        return getRecursive(index, sentinel);
     }
 }
