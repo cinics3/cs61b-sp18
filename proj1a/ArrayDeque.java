@@ -80,7 +80,9 @@ public class ArrayDeque<T> {
     public T removeFirst() {
         T res = getFirst();
         item[nextFirst] = null;
-        nextFirst = (nextFirst + 1 + maxSize) % maxSize;
+        while (item[nextFirst] == null) {
+            nextFirst = (nextFirst + 1 + maxSize) % maxSize;
+        }
         size -= 1;
         return res;
     }
@@ -88,7 +90,9 @@ public class ArrayDeque<T> {
     public T removeLast() {
         T res = getLast();
         item[nextLast] = null;
-        nextLast = (nextLast - 1 + maxSize) % maxSize;
+        while (item[nextLast] == null) {
+            nextLast = (nextLast - 1 + maxSize) % maxSize;
+        }
         size -= 1;
         return res;
     }
@@ -103,7 +107,7 @@ public class ArrayDeque<T> {
     }
 
     public T get(int i) {
-        return item[i];
+        return item[i - 1];
     }
 
 }
