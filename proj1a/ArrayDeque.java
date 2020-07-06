@@ -10,8 +10,8 @@ public class ArrayDeque<T> {
     /** Create an empty ArrayDeque. */
     public ArrayDeque() {
         item = (T[]) new Object[8];
-        nextFirst = 0;
-        nextLast = 1;
+        nextFirst = 4;
+        nextLast = 5;
         size = 0;
     }
 
@@ -44,7 +44,7 @@ public class ArrayDeque<T> {
 
     /** Add data of the front in the ArrayDeque. */
     public void addFirst(T x) {
-        if (size == item.length) {
+        if (!isFull()) {
             resize(size * factor);
         }
 
@@ -55,7 +55,7 @@ public class ArrayDeque<T> {
 
     /** Add data of the last in the ArrayDeque. */
     public void addLast(T x) {
-        if (size == item.length) {
+        if (!isFull()) {
             resize(size * factor);
         }
 
@@ -81,7 +81,7 @@ public class ArrayDeque<T> {
 
     /** Print ArrayDeque. */
     public void printDeque() {
-        int first = nextFirst;
+        int first = nextFirst + 1;
         int cnt = 0;
 
         while (cnt <= size) {
@@ -97,13 +97,15 @@ public class ArrayDeque<T> {
         if (isSparse()) {
             resize(item.length / 2);
         }
+        if (!isEmpty()) {
+            return null;
+        }
 
         nextFirst = (nextFirst + 1 + item.length) % item.length;
         T res = getFirst();
         item[nextFirst] = null;
-        if (isEmpty()) {
-            size -= 1;
-        }
+        size -= 1;
+
         return res;
     }
 
@@ -113,32 +115,34 @@ public class ArrayDeque<T> {
             resize(item.length / 2);
         }
 
+        if (!isEmpty()) {
+            return null;
+        }
+
         nextLast = (nextLast - 1 + item.length) % item.length;
         T res = getLast();
         item[nextLast] = null;
-        if (isEmpty()) {
-            size -= 1;
-        }
+        size -= 1;
+
         return res;
     }
 
     /** Return the first item of ArrayDeque. */
     private T getFirst() {
-        return item[nextFirst];
+        return item[(nextFirst + 1 + item.length) % item.length];
     }
 
     /** Return the last item of ArrayDeque. */
     private T getLast() {
-        return item[nextLast];
+        return item[(nextLast - 1 + item.length) % item.length] ;
     }
 
     public T get(int i) {
-        if (i < 0 && i >= size) {
+        if (i >= size) {
             return null;
         }
 
         int start = (nextFirst + 1 + item.length) % item.length;
         return item[(start + i) % item.length];
     }
-
 }
