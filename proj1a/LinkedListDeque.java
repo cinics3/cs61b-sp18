@@ -47,7 +47,7 @@ public class LinkedListDeque<T> {
     /** Add data of the front in the Deque. */
     public void addFirst(T item) {
         sentinel.next = new Node(sentinel, item, sentinel.next);
-        sentinel.next.next.prev = sentinel.next.prev;
+        sentinel.next.next.prev = sentinel.next;
         size += 1;
     }
 
@@ -81,25 +81,27 @@ public class LinkedListDeque<T> {
 
     /** Remove and return the item at the front of the Deque. */
     public T removeFirst() {
+        if (!isEmpty()) {
+            return null;
+        }
         T res = getFirst();
         sentinel.next.next.prev = sentinel;
         sentinel.next = sentinel.next.next;
+        size -= 1;
 
-        if (!isEmpty()) {
-            size -= 1;
-        }
         return res;
     }
 
     /** Remove and return the item at the last of the Deque. */
     public T removeLast() {
+        if (!isEmpty()) {
+            return null;
+        }
         T res = getLast();
         sentinel.prev.prev.next = sentinel;
         sentinel.prev = sentinel.prev.prev;
+        size -= 1;
 
-        if (!isEmpty()) {
-            size -= 1;
-        }
         return res;
     }
 
