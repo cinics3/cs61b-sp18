@@ -44,7 +44,7 @@ public class ArrayDeque<T> {
 
     /** Add data of the front in the ArrayDeque. */
     public void addFirst(T x) {
-        if (!isFull()) {
+        if (isFull()) {
             resize(size * factor);
         }
 
@@ -55,7 +55,7 @@ public class ArrayDeque<T> {
 
     /** Add data of the last in the ArrayDeque. */
     public void addLast(T x) {
-        if (!isFull()) {
+        if (isFull()) {
             resize(size * factor);
         }
 
@@ -97,7 +97,7 @@ public class ArrayDeque<T> {
         if (isSparse()) {
             resize(item.length / 2);
         }
-        if (!isEmpty()) {
+        if (isEmpty()) {
             return null;
         }
 
@@ -115,7 +115,7 @@ public class ArrayDeque<T> {
             resize(item.length / 2);
         }
 
-        if (!isEmpty()) {
+        if (isEmpty()) {
             return null;
         }
 
