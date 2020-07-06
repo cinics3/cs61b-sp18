@@ -5,7 +5,7 @@ public class ArrayDeque<T> {
     private int nextFirst;
     private int nextLast;
     private int size;
-    private int factor = 2;
+    private static int factor = 2;
 
     /** Create an empty ArrayDeque. */
     public ArrayDeque() {
@@ -81,12 +81,12 @@ public class ArrayDeque<T> {
 
     /** Print ArrayDeque. */
     public void printDeque() {
-        int first = nextFirst + 1;
+        int first = (nextFirst + 1 + item.length) % item.length;
         int cnt = 0;
 
-        while (cnt <= size) {
+        while (cnt < size) {
             cnt++;
-            System.out.println(item[first] + " ");
+            System.out.print(item[first] + " ");
             first = (first + 1 + item.length) % item.length;
         }
         System.out.println();
@@ -129,12 +129,12 @@ public class ArrayDeque<T> {
 
     /** Return the first item of ArrayDeque. */
     private T getFirst() {
-        return item[(nextFirst + 1 + item.length) % item.length];
+        return item[nextFirst];
     }
 
     /** Return the last item of ArrayDeque. */
     private T getLast() {
-        return item[(nextLast - 1 + item.length) % item.length] ;
+        return item[nextLast];
     }
 
     public T get(int i) {
@@ -145,4 +145,5 @@ public class ArrayDeque<T> {
         int start = (nextFirst + 1 + item.length) % item.length;
         return item[(start + i) % item.length];
     }
+
 }
