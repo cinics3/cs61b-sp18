@@ -81,7 +81,7 @@ public class LinkedListDeque<T> {
 
     /** Remove and return the item at the front of the Deque. */
     public T removeFirst() {
-        if (!isEmpty()) {
+        if (isEmpty()) {
             return null;
         }
         T res = getFirst();
@@ -94,7 +94,7 @@ public class LinkedListDeque<T> {
 
     /** Remove and return the item at the last of the Deque. */
     public T removeLast() {
-        if (!isEmpty()) {
+        if (isEmpty()) {
             return null;
         }
         T res = getLast();
