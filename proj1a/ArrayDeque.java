@@ -17,12 +17,11 @@ public class ArrayDeque<T> {
 
     /*
     public ArrayDeque(ArrayDeque other) {
-        item = (T[]) new Object[other.maxSize];
+        item = (T[]) new Object[other.item.length];
         nextFirst = other.nextFirst;
         nextLast = other.nextLast;
-        maxSize = other.maxSize;
         size = other.size;
-        System.arraycopy(item, 0, other, 0, maxSize - 1);
+        System.arraycopy(item, 0, other, 0, other.item.length);
     }
     */
 
