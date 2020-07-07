@@ -50,7 +50,7 @@ public class LinkedListDeque<T> implements Deque<T> {
 
     @Override
     public void addLast(T item) {
-        sentinel.prev = new Node(sentinel.prev,item, sentinel);
+        sentinel.prev = new Node(sentinel.prev, item, sentinel);
         sentinel.prev.prev.next = sentinel.prev;
         size += 1;
     }
