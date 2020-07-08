@@ -10,7 +10,7 @@ public class TestOffByN {
     static CharacterComparator offBy5 = new OffByN(5);
 
     @Test
-    public void TestOffByOne() {
+    public void TestOffByN() {
         boolean actual = offBy5.equalChars('a', 'a');
 
         assertFalse("false", actual);
@@ -26,5 +26,9 @@ public class TestOffByN {
         boolean actual3 = offBy5.equalChars('b', 'a');
 
         assertTrue("true", actual3);
+
+        assertTrue(offBy5.equalChars('a', 'f'));
+        assertTrue(offBy5.equalChars('f', 'a'));
+        assertFalse(offBy5.equalChars('a', 'b'));
     }
 }
