@@ -2,6 +2,9 @@ package lab9;
 
 import java.util.Iterator;
 import java.util.Set;
+import java.util.TreeSet;
+import java.util.Stack;
+import java.util.ArrayList;
 
 /**
  * Implementation of interface Map61B with BST as core data structure.
@@ -44,7 +47,13 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      *  or null if this map contains no mapping for the key.
      */
     private V getHelper(K key, Node p) {
-        throw new UnsupportedOperationException();
+        if (key == null) throw new IllegalArgumentException("calls get() with a null key");
+        if (p == null) return null;
+
+        int cmp = key.compareTo(p.key);
+        if (cmp < 0) return getHelper(key, p.left);
+        else if (cmp > 0) return getHelper(key, p.right);
+        else return p.value;
     }
 
     /** Returns the value to which the specified key is mapped, or null if this
@@ -52,14 +61,24 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      */
     @Override
     public V get(K key) {
-        throw new UnsupportedOperationException();
+        return getHelper(key, root);
     }
 
     /** Returns a BSTMap rooted in p with (KEY, VALUE) added as a key-value mapping.
       * Or if p is null, it returns a one node BSTMap containing (KEY, VALUE).
      */
     private Node putHelper(K key, V value, Node p) {
-        throw new UnsupportedOperationException();
+        if (p == null) {
+            size ++;
+            return new Node(key, value);
+        }
+
+        int cmp = key.compareTo(p.key);
+        if (cmp < 0) p.left = putHelper(key, value, p.left);
+        else if (cmp > 0) p.right = putHelper(key, value, p.right);
+        else p.value = value;
+
+        return p;
     }
 
     /** Inserts the key KEY
@@ -67,13 +86,14 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      */
     @Override
     public void put(K key, V value) {
-        throw new UnsupportedOperationException();
+        if (key == null) throw new IllegalArgumentException("calls put() with a null key");
+        root = putHelper(key, value, root);
     }
 
     /* Returns the number of key-value mappings in this map. */
     @Override
     public int size() {
-        throw new UnsupportedOperationException();
+        return size;
     }
 
     //////////////// EVERYTHING BELOW THIS LINE IS OPTIONAL ////////////////
@@ -81,7 +101,17 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     /* Returns a Set view of the keys contained in this map. */
     @Override
     public Set<K> keySet() {
-        throw new UnsupportedOperationException();
+        TreeSet<K> set = new TreeSet<>();
+        inOrder(root, set);
+        return set;
+    }
+
+    private void inOrder(Node x, TreeSet<K> set) {
+        if (x == null) return ;
+
+        inOrder(x.left, set);
+        set.add(x.key);
+        inOrder(x.right, set);
     }
 
     /** Removes KEY from the tree if present
@@ -90,7 +120,78 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      */
     @Override
     public V remove(K key) {
-        throw new UnsupportedOperationException();
+        V value = get(key);
+        if (value != null) {
+            root = remove(root, key);
+            return value;
+        }
+
+        return null;
+    }
+
+    private K min() {
+        return min(root).key;
+    }
+
+    private Node min(Node x) {
+        if (x.left == null) return x;
+        else return min(x.left);
+    }
+
+    private K max() {
+        return max(root).key;
+    }
+
+    private Node max(Node x) {
+        if (x.right == null) return x;
+        else return max(x.right);
+    }
+
+    private Node removeMin(Node x) {
+        if (x.left == null) {
+            size --;
+            return x.right;
+        }
+
+        x.left = removeMin(x.left);
+        return x;
+    }
+
+    private Node removeMax(Node x) {
+        if (x.right == null) {
+            size --;
+            return x.left;
+        }
+
+        x.right = removeMax(x.right);
+        return x;
+    }
+
+
+    private Node remove(Node x, K key) {
+        if (x == null) return null;
+
+        int cmp = key.compareTo(x.key);
+        if (cmp < 0) x.left = remove(x.left, key);
+        else if (cmp > 0) x.right = remove(x.right, key);
+        else {
+            if (x.left == null) {
+                size --;
+                return x.right;
+            }
+
+            if (x.right == null) {
+                size --;
+                return x.left;
+            }
+
+            Node t = x;
+            x = min(t.right);
+            x.right = removeMin(t.right);
+            x.left = t.left;
+        }
+
+        return x;
     }
 
     /** Removes the key-value entry for the specified key only if it is
@@ -99,11 +200,63 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      **/
     @Override
     public V remove(K key, V value) {
-        throw new UnsupportedOperationException();
+        V res = get(key);
+        if (res == value) {
+            root = remove(root, key);
+            return res;
+        }
+
+        return null;
     }
 
     @Override
     public Iterator<K> iterator() {
-        throw new UnsupportedOperationException();
+        return new BSTMapIterator();
+    }
+
+    private class BSTMapIterator implements Iterator<K> {
+        private Stack<Node> stack;
+        private ArrayList<K> keys;
+        private int pos;
+
+        public BSTMapIterator() {
+            stack = new Stack<>();
+            keys = new ArrayList<>();
+            pos = 0;
+
+            stack.push(root);
+            while (!stack.empty()) {
+                Node cur = stack.pop();
+                keys.add(cur.key);
+
+                if (cur.right != null)
+                    stack.push(cur.right);
+
+                if (cur.left != null)
+                    stack.push(cur.left);
+            }
+        }
+
+        public boolean hasNext() {
+            return pos < size;
+        }
+
+        public K next() {
+            K returnItem = keys.get(pos);
+            pos += 1;
+            return returnItem;
+        }
+    }
+
+    public static void main(String[] args) {
+        BSTMap<String, Integer> bstmap = new BSTMap<>();
+        bstmap.put("hello", 5);
+        bstmap.put("cat", 10);
+        bstmap.put("fish", 22);
+        bstmap.put("zebra", 90);
+
+        for (String s : bstmap) {
+            System.out.println(s);
+        }
     }
 }
