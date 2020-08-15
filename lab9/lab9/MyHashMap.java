@@ -82,9 +82,11 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     /* Returns a Set view of the keys contained in this map. */
     @Override
     public Set<K> keySet() {
+        if (size == 0)
+            return null;
         Set<K> set = new HashSet<>();
 
-        for (int i = 0; i < size; i ++) {
+        for (int i = 0; i < buckets.length; i ++) {
             set.addAll(buckets[i].keySet());
         }
 
@@ -111,8 +113,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * throw an UnsupportedOperationException.*/
     @Override
     public V remove(K key, V value) {
-        int i = hash(key);
-        return buckets[i].remove(key, value);
+        return buckets[hash(key)].remove(key, value);
     }
 
     @Override
